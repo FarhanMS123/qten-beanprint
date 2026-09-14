@@ -25,7 +25,11 @@ If you or your subagents write Python scripts for data processing:
 
 ## 4. Parent Agent Delegation Rules (MANDATORY)
 If you (the Parent Agent) spawn subagents to help with this research, you MUST strictly enforce the boundaries of this skill. 
+- **Shared Draft/Report Initialization:** The Parent Agent MUST create the `{research title}_DRAFT.md` (and REPORT) files *first* before spawning any subagents. When delegating, the Parent MUST explicitly pass the absolute paths of these files in the prompt so that all subagents write to the exact same shared files.
 - **NEVER FORWARD RAW PROMPTS:** Do NOT just blindly pass the user's raw prompt to the subagent. You MUST wrap the user's prompt with strict rules.
 - **Strict Prompting:** When invoking a subagent, your `Prompt` payload MUST explicitly contain this exact string: 
   *"CRITICAL RESTRICTION: DO NOT read, view, grep, or analyze any existing project files. You are strictly forbidden from using view_file or list_dir on the project folder, and strictly forbidden from using git commands. Use 'run_command' with 'ls' ONLY to check if a file exists."*
 - **Rules Injection:** You MUST command the subagent in its initial prompt to read this exact file (`~/.gemini/config/skills/deep-research/references/RULES.md`) before taking any action.
+
+## 5. Subagent & Coordinator Autonomy Rules
+- **Proactive Rule Seeking:** If a subagent or coordinator wakes up and notices they were passed a raw, exact copy of a user's prompt without the required rules, context, or file restrictions attached, they MUST NOT blindly execute it. They must take the initiative to message the Parent Agent and explicitly ask for the basic rules, file restrictions, additional information, and further directions before proceeding.

@@ -16,6 +16,8 @@ This skill transforms the agent into an autonomous, deep-research engine.
 - **Problem Formulation & Evidentiary Rigor:** Treat all questions in the user's prompt purely as initial "user formulations". Do not just answer them passively. You must actively rephrase them, add your OWN advanced questions and arguments, and ruthlessly hunt for hard evidence to support or refute them.
 - **Argument over Authority:** Value robust logical arguments and data over mere domain authority.
 - **Source Prioritization:** Prioritize primary sources (official brand sites, primary academic papers) over SEO-heavy blogs. 
+- **Zero-Shot Knowledge Prohibition:** Always do surfing with the search engine (`search_web` / Google Search) to find hard evidence, grounding, and current data. You MUST avoid depending on your internal knowledge cutoff or pre-training memory. Prove everything with external searches.
+
 
 ## 2. System Architecture & Native Tool Mapping
 - **Triage / Supervisor (via `@modelcontextprotocol/server-sequentialthinking`):** Break down the main query into 3-5 independent subtopics.
@@ -24,13 +26,14 @@ This skill transforms the agent into an autonomous, deep-research engine.
 - **GitHub Researcher (via `gh` cli):** NEVER use web scraping for GitHub URLs. ALWAYS use the natively installed `gh` CLI in the terminal to read repositories, pull requests, and issues.
 - **Data Parser (via `pdf`, `docx`, `xlsx` skills):** Parse unstructured web pages and downloaded local files into clean formats.
 
-## 3. Web Scraping & API Data Extraction (100% Local)
-When you need to extract data from websites, you must use local tools. You are strictly forbidden from writing scraping scripts from scratch or using paid 3rd-party APIs.
+## 3. Web Scraping, APIs & Data Extraction (100% Local CLI Preference)
+When you need to extract data, you must use local tools. You are strictly forbidden from using paid 3rd-party APIs.
 
-- **Simple Websites & APIs (Use Native CLI):** If you are just simply getting a static website, downloading a file, or hitting a REST API, **DEFAULT to using native CLI tools.** Use `curl` to fetch the data. If parsing structured data, pipe it through `jq` (for JSON) or `yq` (for YAML). This is the fastest, most context-efficient method.
+- **CLI-First Rule for Simple Tasks:** Mostly avoid and DO NOT write custom Python or complex shell scripts from scratch if the task is simple. Instead, compose short shell commands using pipes (`|`) with native binary CLI utilities like `curl`, `gh`, `jq`, and `yq`.
+- **Temporary Files for Repeated Access:** If a command's output is too long or you expect to analyze the same target multiple times (such as reading the same website or API response over and over), DO NOT hit the live endpoint multiple times. Instead, explicitly route the output to a temporary file (e.g., `> /tmp/output.txt`), and then read from that local file using `cat`, `less`, `grep`, `echo`, `print`, or any basic shell command. Once you are finished analyzing the data and no longer need it, you MUST clean up and delete the temporary file (`rm /tmp/...`).
 - **Complex SPA Sites (Use Local Scraper):** If (and only if) the website is a complex Single Page Application that requires JavaScript rendering, you MUST use the pre-built local Playwright scraping script: `~/.gemini/config/skills/deep-research/scripts/scrape_url.sh <URL>`. 
-  - *How It Works:* It runs 100% locally on your machine, launches headless Chromium, executes JavaScript, converts the DOM into Markdown, and stores it in `/tmp/<name>_scraped.md`.
-  - *Post-Scraping:* Once the script outputs the temporary file path, remember it! You must then use native terminal commands like `grep`, `cat`, `head`, and `tail` on that temporary markdown file to extract the exact quotes and evidence.
+  - *How It Works:* It runs locally, launches headless Chromium, executes JavaScript, converts the DOM into Markdown, and stores it in `/tmp/<name>_scraped.md`.
+  - *Post-Scraping:* Remember the temporary file path! Use native terminal commands (`grep`, `cat`, `head`, `tail`) on that markdown file to extract the exact quotes and evidence.
 
 ## 4. The Deep Research Loop & Note-Taking
 
