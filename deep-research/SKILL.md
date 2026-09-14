@@ -8,7 +8,7 @@ description: Conducts deep, iterative, multi-hop research on complex topics (sim
 This skill transforms the agent into an autonomous, deep-research engine. 
 
 > [!CAUTION]
-> **MANDATORY PREREQUISITE:** Before starting ANY research task, you MUST read `~/.gemini/config/skills/deep-research/resources/RULES.md`. It contains absolute constraints regarding file overwrites, context preservation, and sandbox escapes. If you spawn any subagents, you MUST command them to read that `RULES.md` file as their very first action.
+> **MANDATORY PREREQUISITE:** Before starting ANY research task, you MUST read `~/.gemini/config/skills/deep-research/references/RULES.md`. It contains absolute constraints regarding file overwrites, context preservation, and sandbox escapes. If you spawn any subagents, you MUST command them to read that `RULES.md` file as their very first action.
 
 ## 1. Core Research Mindset & Directives
 - **Clarification Phase:** Assess if you need to ask a clarifying question before starting. If unstated dimensions are critical, ask. 

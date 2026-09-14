@@ -28,4 +28,4 @@ If you (the Parent Agent) spawn subagents to help with this research, you MUST s
 - **NEVER FORWARD RAW PROMPTS:** Do NOT just blindly pass the user's raw prompt to the subagent. You MUST wrap the user's prompt with strict rules.
 - **Strict Prompting:** When invoking a subagent, your `Prompt` payload MUST explicitly contain this exact string: 
   *"CRITICAL RESTRICTION: DO NOT read, view, grep, or analyze any existing project files. You are strictly forbidden from using view_file or list_dir on the project folder, and strictly forbidden from using git commands. Use 'run_command' with 'ls' ONLY to check if a file exists."*
-- **Rules Injection:** You MUST command the subagent in its initial prompt to read this exact file (`~/.gemini/config/skills/deep-research/resources/RULES.md`) before taking any action.
+- **Rules Injection:** You MUST command the subagent in its initial prompt to read this exact file (`~/.gemini/config/skills/deep-research/references/RULES.md`) before taking any action.
